@@ -1,14 +1,11 @@
-# Pedestrian Attribute Recognition and Attributed-based Person Retrieval Challenge at WACV 2024 (UPAR@WACV2024)
+# Pedestrian Attribute Recognition low-resource modeling
 
-The UPAR@WACV2024 challenge includes separate tracks for Pedestrian Attribute Recognition and Attribute-based Person
-Retrieval.
-This challenge aims to spotlight the problem of domain gap in a real-world surveillance context and highlight the
-challenges and limitations of existing methods to provide a direction of research for the future.
-It will be based on an extenstion of the UPAR Dataset [1] composed of annotations for 40 binary attributes.
+This repository stems from the UPAR@WACV2024 challenge. The goal is to implement attribute classification
+for persons using traditional computer vision methods, i.e. non-CNN based. This repo uses the UPAR dataset, with 
+40 binary attribute annotations for multilabel classification.
 
-## News
-- 2023-10-16 Decryption key: UVk4yayzy38zEMKH
-- 2023-10-13 Encrypted test data is now available [here](https://drive.google.com/file/d/1eJKKvWenl6aQE76D0j0asf3YVthVvqpq/view?usp=sharing). Decryption key will be released on Oct 16th.
+## Test Data
+Encrypted test data is available [here](https://drive.google.com/file/d/1eJKKvWenl6aQE76D0j0asf3YVthVvqpq/view?usp=sharing). Decryption key: UVk4yayzy38zEMKH
 
 ## Information
 Challenge website: [UPAR Challenge](https://chalearnlap.cvc.uab.cat/challenge/52/description/)
@@ -17,17 +14,16 @@ Associated workshop: [Real-World Surveillance: Applications and Challenges Works
 
 Challenge dataset: [UPAR dataset](https://openaccess.thecvf.com/content/WACV2023/papers/Specker_UPAR_Unified_Pedestrian_Attribute_Recognition_and_Person_Retrieval_WACV_2023_paper.pdf)
 
-Challenge results 2023: [UPAR@WACV2023](https://openaccess.thecvf.com/content/WACV2023W/RWS/papers/Cormier_UPAR_Challenge_Pedestrian_Attribute_Recognition_and_Attribute-Based_Person_Retrieval_--_WACVW_2023_paper.pdf)
+Previous year Challenge results (2023): [UPAR@WACV2023](https://openaccess.thecvf.com/content/WACV2023W/RWS/papers/Cormier_UPAR_Challenge_Pedestrian_Attribute_Recognition_and_Attribute-Based_Person_Retrieval_--_WACVW_2023_paper.pdf)
 
 Original UPAR dataset: [Github](https://github.com/speckean/upar_dataset)
 
 ## Challenge Dataset
-We will build on an extension of the UPAR dataset.
 The challenge dataset consists of the harmonization of three public datasets (PA100K, PETA, and Market1501-Attributes) and a private test set.
 40 binary attributes have been unified between those for which we provide additional annotations.
 This dataset enables the investigation of Pedestrian Attribute Recognition (PAR) methods' generalization ability under different attribute distributions, viewpoints, varying illumination, and low resolutions.
 The UPAR annotations and this repository are published under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/de/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License</a>.
-If you use the UPAR dataset, please cite our paper as well as the papers of the sub-datasets (see [Dataset information](#Datasetinformation))
+If you use the UPAR dataset, please cite the paper as well as the papers of the sub-datasets (see [Dataset information](#Datasetinformation))
 ```
 @inproceedings{specker2023upar,
   title={UPAR: Unified pedestrian attribute recognition and person retrieval},

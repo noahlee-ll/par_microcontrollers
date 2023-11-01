@@ -51,10 +51,10 @@ conda env create -f environment.yml
 conda activate rws-upar-challenge
 ```
 
-Using pip (download Python)
+Using pip (download Python3)
 ```
-python -m venv .venv/rws-upar-challenge
-source .venv/rws-upar-challenge/bin/activate (or .venv/rws-upar-challenge/Scripts/activate if on Windows)
+python -m venv .venv/par-microcontroller
+source .venv/par-microcontroller/bin/activate
 pip install tqdm notebook gdown requests numpy
 ```
 2. Download the images, annotations, and templates for the development phase.

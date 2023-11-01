@@ -50,21 +50,14 @@ def prepare_datasets(path):
         "Annotations"
     )
 
-    templates_path = dataset_path / "2024_submission_templates.zip"
-    templates_present = is_data_downloaded(
-        "https://drive.google.com/file/d/11ZxT8kixkV-vAj8aixS8n2aGJ5Rw0OQy/view",
-        templates_path,
-        "Submission templates"
-    )
 
-    if not all([market_present, pa100k_present, peta_present, annotations_present, templates_present]):
+    if not all([market_present, pa100k_present, peta_present, annotations_present]):
         raise RuntimeError("Missing downloaded zipfiles. Download the data and try again.")
 
     extract_zip(market_path, dataset_path)
     extract_zip(pa100k_path, dataset_path)
     extract_zip(peta_path, dataset_path)
     extract_zip(annotations_path, dataset_path)
-    extract_zip(templates_path, dataset_path)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

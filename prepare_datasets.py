@@ -4,6 +4,10 @@ import zipfile
 from tqdm import tqdm
 import shutil
 import numpy as np
+import pyzipper
+import os
+import oschmod
+import stat
 
 
 def is_data_downloaded(resource_url: str, expected_file: Path, resource_name: str):
@@ -13,30 +17,16 @@ def is_data_downloaded(resource_url: str, expected_file: Path, resource_name: st
     return False
 
 def extract_zip(src, dst, pwd=None):
-    with zipfile.ZipFile(src, "r") as zf:
-        for member in tqdm(zf.infolist(), desc="Extracting "):
-            try:
-                zf.extract(member, dst, pwd=pwd)                    
-            except zipfile.error as err:
-                print(err)
-
-def prepare_peta(dataset_path):
-    # PETA dataset
-    peta_path = dataset_path / "PETA"
-    peta_path.mkdir(parents=True, exist_ok=True)
-    peta_zipfile = peta_path / "peta.zip"
-    print("Download PETA dataset")
-    url = "https://www.dropbox.com/s/52ylx522hwbdxz6/PETA.zip?dl=1"
-    download_url(url, peta_zipfile)
-    print("Extract PETA dataset")
-    extract_zip(peta_zipfile, peta_path)
-    peta_img_path = peta_path / "images"
-    peta_img_path.mkdir(parents=True, exist_ok=True)
-    mapping = {row[0]: row[1] for row in np.genfromtxt("peta_file_mapping.txt", dtype=str, delimiter=",")}
-    for file in tqdm(peta_path.glob("*/*/*/*")):
-        if file.suffix == ".txt":
-            continue
-        shutil.move(file, dataset_path / mapping[str(PurePosixPath(file)).replace(str(dataset_path) + "/", "")])
+    try:
+        with zipfile.ZipFile(src, "r") as zf:
+            for member in tqdm(zf.infolist(), desc="Extracting "):
+                mem = zf.extract(member, dst, pwd=bytes(pwd, encoding='utf-8') if pwd is not None else None)
+    except Exception as err:
+        print(err)
+        print("Attempting AES extraction.")
+        with pyzipper.AESZipFile(src) as zf:
+            for member in tqdm(zf.infolist(), desc="Extracting "):
+                zf.extract(member, dst, pwd=bytes(pwd, encoding='utf-8') if pwd is not None else None)
 
 def prepare_datasets(path):
     # Datasets folder
@@ -64,23 +54,31 @@ def prepare_datasets(path):
         "PETA"
     )
     
-    annotations_zip = dataset_path / "2024_phase1.zip"
-    annotations_present = is_data_downloaded(
+    train_annotations_zip = dataset_path / "2024_phase1.zip"
+    train_annotations_present = is_data_downloaded(
         "https://drive.google.com/file/d/1FMX9nUrXArxW4wkORO6Z7zp7xy7JBjUM/view?usp=sharing",
-        annotations_zip,
-        "Annotations"
+        train_annotations_zip,
+        "Train annotations"
+    )
+
+    test_annotations_zip = dataset_path / "phase2.zip"
+    test_annotations_present = is_data_downloaded(
+        "https://drive.google.com/file/d/1eJKKvWenl6aQE76D0j0asf3YVthVvqpq/view?usp=sharing",
+        test_annotations_zip,
+        "Test annotations"
     )
 
 
-    if not all([market_present, pa100k_present, peta_present, annotations_present]):
+    if not all([market_present, pa100k_present, peta_present, train_annotations_present, test_annotations_present]):
         raise RuntimeError("Missing downloaded zipfiles. Download the data and try again.")
 
     extract_zip(market_zip, dataset_path)
     extract_zip(pa100k_zip, dataset_path / "PA100k")
     extract_zip(peta_zip, dataset_path / "PETA")
-    extract_zip(annotations_zip, dataset_path)
+    extract_zip(train_annotations_zip, dataset_path)
+    extract_zip(test_annotations_zip, dataset_path, pwd="UVk4yayzy38zEMKH")
 
-    (dataset_path / "Market-1501-v15.09.15").rename(dataset_path / "Market1501")
+    (dataset_path / "Market-1501-v15.09.15").replace(dataset_path / "Market1501")
 
     (dataset_path / "PETA" / "images").mkdir(exist_ok=True)
     mapping = {row[0]: row[1] for row in np.genfromtxt("peta_file_mapping.txt", dtype=str, delimiter=",")}
@@ -88,6 +86,8 @@ def prepare_datasets(path):
         if file.suffix == ".txt":
             continue
         shutil.move(file, dataset_path / mapping[str(PurePosixPath(file)).replace(str(dataset_path) + "/", "")])
+
+    (dataset_path / "phase1").replace(dataset_path / "annotations")
 
 
 if __name__ == "__main__":
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--data-dir",
         type=str,
-        default="./data",
+        default="./datasets",
         help="Dataset directory. Downloaded datasets are stored in this directory.",
     )
     args = parser.parse_args()

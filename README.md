@@ -8,7 +8,7 @@ for persons using traditional computer vision methods, i.e. non-CNN based. This 
 Encrypted test data is available [here](https://drive.google.com/file/d/1eJKKvWenl6aQE76D0j0asf3YVthVvqpq/view?usp=sharing). Decryption key: UVk4yayzy38zEMKH
 
 ## Information
-Challenge website: [UPAR Challenge](https://chalearnlap.cvc.uab.cat/challenge/52/description/)
+Challenge website: [UPAR Challenge](https://chalearnlap.cvc.uab.cat/challenge/57/description/)
 
 Associated workshop: [Real-World Surveillance: Applications and Challenges Workshop](https://vap.aau.dk/rws-wacv2024/)
 
@@ -45,27 +45,21 @@ If you use the UPAR dataset, please cite the paper as well as the papers of the 
 ## Starter Kit Usage
 1. Install the python requirements.
 
-Using Anaconda (download Anaconda or miniconda)
-```
-conda env create -f environment.yml
-conda activate rws-upar-challenge
-```
-
 Using pip (download Python3)
 ```
-python -m venv .venv/par-microcontroller
-source .venv/par-microcontroller/bin/activate
-pip install tqdm notebook gdown requests numpy
+python -m venv .venv/par-env
+source .venv/par-env/bin/activate
+pip install -r requirements.txt
 ```
 2. Download the images, annotations, and templates for the development phase.
 ```
-python download_datasets.py
+python prepare_datasets.py
 ```
 3. The structure should now look as follows:
 ```
 .
 │── data/                               
-│   ├── phase1/                         -> annotations for the development phase
+│   ├── annotations/                    -> annotations for the development phase
 │   │   │── train/                      -> train images with attribute labels for the three splits             
 │   │   │   └── train.csv
 │   │   ├── val_task1/                  -> information required for task 1 submissions to the evaluation server
@@ -73,6 +67,14 @@ python download_datasets.py
 │   │   └── val_task2/                  -> information required for task 2 submissions to the evaluation server
 │   │       ├── val_imgs.csv            -> list of gallery images
 │   │       └── val_queries.csv         -> attribute queries
+│   │   │── val_gt/                     -> attribute labels for validation split
+│   │       └── val_gt.csv              
+│   │   ├── test_task1/                 -> split of test images for task 1
+│   │   │   └── test.csv                 -> list of test split images
+│   │   └── test_task2/                  -> split of test images for task 2
+│   │       ├── test_imgs.csv            -> list of gallery images
+│   │       └── test_queries.csv         -> attribute queries
+|   |   |
 │   ├── Market1501/                     -> Market1501 dataset
 │   │   ├── bounding_box_test/
 │   │   ├── bounding_box_train/

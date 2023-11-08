@@ -5,9 +5,6 @@ from tqdm import tqdm
 import shutil
 import numpy as np
 import pyzipper
-import os
-import oschmod
-import stat
 
 
 def is_data_downloaded(resource_url: str, expected_file: Path, resource_name: str):
@@ -78,7 +75,8 @@ def prepare_datasets(path):
     extract_zip(train_annotations_zip, dataset_path)
     extract_zip(test_annotations_zip, dataset_path, pwd="UVk4yayzy38zEMKH")
 
-    (dataset_path / "Market-1501-v15.09.15").replace(dataset_path / "Market1501")
+    shutil.copytree(dataset_path / "Market-1501-v15.09.15", dataset_path / "Market1501", dirs_exist_ok=True)
+    shutil.rmtree(dataset_path / "Market-1501-v15.09.15")
 
     (dataset_path / "PETA" / "images").mkdir(exist_ok=True)
     mapping = {row[0]: row[1] for row in np.genfromtxt("peta_file_mapping.txt", dtype=str, delimiter=",")}
@@ -87,7 +85,8 @@ def prepare_datasets(path):
             continue
         shutil.move(file, dataset_path / mapping[str(PurePosixPath(file)).replace(str(dataset_path) + "/", "")])
 
-    (dataset_path / "phase1").replace(dataset_path / "annotations")
+    shutil.copytree(dataset_path / "phase1", dataset_path / "annotations", dirs_exist_ok=True)
+    shutil.rmtree(dataset_path / "phase1")
 
 
 if __name__ == "__main__":
@@ -98,7 +97,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--data-dir",
         type=str,
-        default="./datasets",
+        default="./data",
         help="Dataset directory. Downloaded datasets are stored in this directory.",
     )
     args = parser.parse_args()

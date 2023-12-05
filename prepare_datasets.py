@@ -67,7 +67,7 @@ def prepare_datasets(path):
 
 
     if not all([market_present, pa100k_present, peta_present, train_annotations_present, test_annotations_present]):
-        raise RuntimeError("Missing downloaded zipfiles. Download the data and try again.")
+        return
 
     extract_zip(market_zip, dataset_path)
     extract_zip(pa100k_zip, dataset_path / "PA100k")
@@ -87,6 +87,7 @@ def prepare_datasets(path):
 
     shutil.copytree(dataset_path / "phase1", dataset_path / "annotations", dirs_exist_ok=True)
     shutil.rmtree(dataset_path / "phase1")
+    return
 
 
 if __name__ == "__main__":

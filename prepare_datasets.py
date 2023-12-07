@@ -51,6 +51,7 @@ def prepare_datasets(path):
         "PETA"
     )
     
+    """
     train_annotations_zip = dataset_path / "2024_phase1.zip"
     train_annotations_present = is_data_downloaded(
         "https://drive.google.com/file/d/1FMX9nUrXArxW4wkORO6Z7zp7xy7JBjUM/view?usp=sharing",
@@ -64,16 +65,17 @@ def prepare_datasets(path):
         test_annotations_zip,
         "Test annotations"
     )
+    """
 
 
-    if not all([market_present, pa100k_present, peta_present, train_annotations_present, test_annotations_present]):
+    if not all([market_present, pa100k_present, peta_present,]): #train_annotations_present, test_annotations_present]):
         return
 
     extract_zip(market_zip, dataset_path)
     extract_zip(pa100k_zip, dataset_path / "PA100k")
     extract_zip(peta_zip, dataset_path / "PETA")
-    extract_zip(train_annotations_zip, dataset_path)
-    extract_zip(test_annotations_zip, dataset_path, pwd="UVk4yayzy38zEMKH")
+    #extract_zip(train_annotations_zip, dataset_path)
+    #extract_zip(test_annotations_zip, dataset_path, pwd="UVk4yayzy38zEMKH")
 
     shutil.copytree(dataset_path / "Market-1501-v15.09.15", dataset_path / "Market1501", dirs_exist_ok=True)
     shutil.rmtree(dataset_path / "Market-1501-v15.09.15")
